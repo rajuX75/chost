@@ -1,0 +1,8 @@
+{
+  "domains": {},
+  "settings": {
+    "proxyPort": 80,
+    "sslPort": 443,
+    "hostsFileManagement": true
+  }
+}

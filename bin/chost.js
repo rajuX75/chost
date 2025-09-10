@@ -31,8 +31,12 @@ program
   .version(pkg.version)
   .option('-v, --verbose', 'Enable verbose output')
   .hook('preAction', (thisCommand) => {
-    // Set global verbose flag
-    global.VERBOSE = thisCommand.opts().verbose || false;
+    const logger = require('../src/utils/logger');
+    const options = thisCommand.opts();
+    if (options.verbose) {
+      global.VERBOSE = true;
+      logger.setLevel('debug');
+    }
   });
 
 // Commands
@@ -49,6 +53,7 @@ program
   .option('-p, --port <port>', 'Target port (default: 3000)', '3000')
   .option('--ssl', 'Enable SSL for this domain')
   .option('--no-proxy', 'Disable proxy for this domain')
+  .option('-f, --force', 'Add without confirmation for port usage')
   .action(addCommand);
 
 program
@@ -56,6 +61,7 @@ program
   .alias('rm')
   .description('Remove domain mapping')
   .option('--keep-hosts', 'Keep hosts file entry')
+  .option('-f, --force', 'Remove without confirmation')
   .action(removeCommand);
 
 program

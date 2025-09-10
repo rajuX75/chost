@@ -32,16 +32,18 @@ async function addCommand(domain, options) {
     }
 
     // Check if port is available (optional warning)
-    const portAvailable = await isPortAvailable(port);
-    if (!portAvailable) {
-      logger.clearLoading();
-      const useAnyway = await logger.confirm(
-        `Port ${port} appears to be in use. Add domain anyway?`
-      );
-      if (!useAnyway) {
-        logger.info('Domain addition cancelled');
-        return;
-      }
+    if (!options.force) {
+        const portAvailable = await isPortAvailable(port);
+        if (!portAvailable) {
+          logger.clearLoading();
+          const useAnyway = await logger.confirm(
+            `Port ${port} appears to be in use. Add domain anyway?`
+          );
+          if (!useAnyway) {
+            logger.info('Domain addition cancelled');
+            return;
+          }
+        }
     }
 
     logger.clearLoading();

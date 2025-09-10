@@ -45,7 +45,11 @@ async function removeCommand(domain, options) {
       { indent: 2 }
     );
 
-    const confirmed = await logger.confirm('Are you sure you want to remove this domain?');
+    let confirmed = options.force;
+    if (!confirmed) {
+        confirmed = await logger.confirm('Are you sure you want to remove this domain?');
+    }
+
     if (!confirmed) {
       logger.info('Domain removal cancelled');
       return;

@@ -109,3 +109,48 @@ async function promptForDomain(existingDomains) {
         return true;
       },
       filter: (input) => input.trim().toLowerCase()
+    },
+    {
+      type: 'input',
+      name: 'port',
+      message: 'Port number (e.g., 3000):',
+      validate: (input) => {
+        if (!input.trim()) {
+          return 'Port number is required';
+        }
+
+        const port = parseInt(input.trim(), 10);
+
+        if (!validatePort(port)) {
+          return 'Invalid port number (1-65535)';
+        }
+
+        return true;
+      },
+      filter: (input) => parseInt(input.trim(), 10)
+    },
+    {
+      type: 'confirm',
+      name: 'ssl',
+      message: 'Enable SSL (HTTPS)?',
+      default: false
+    },
+    {
+      type: 'confirm',
+      name: 'proxy',
+      message: 'Enable proxy?',
+      default: true
+    }
+  ];
+
+  return inquirer.prompt(questions);
+}
+
+function showNextSteps() {
+  logger.header('\nNext Steps');
+  logger.info(`1. Start the server with: ${chalk.cyan('chost server start')}`);
+  logger.info(`2. Add more domains with: ${chalk.cyan('chost add')}`);
+  logger.info(`3. List all domains with: ${chalk.cyan('chost list')}`);
+}
+
+module.exports = initCommand;
